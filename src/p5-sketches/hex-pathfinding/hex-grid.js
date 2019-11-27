@@ -22,8 +22,8 @@ class HexGrid {
     }
   }
 
-  display = p => {
-    this.cells.forEach(col => col.forEach(cell => cell.display(p)))
+  display = () => {
+    this.cells.forEach(col => col.forEach(cell => cell.display()))
   }
 }
 

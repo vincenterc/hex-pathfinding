@@ -5,8 +5,8 @@ class World {
     this.map = new HexGrid()
   }
 
-  display = p => {
-    this.map.display(p)
+  display = () => {
+    this.map.display()
   }
 }
 
