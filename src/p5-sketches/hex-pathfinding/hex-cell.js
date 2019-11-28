@@ -11,7 +11,7 @@ class HexCell {
         (y & 1) * HexMetrics.innerRadius,
       HexMetrics.outerRadius + y * 1.5 * HexMetrics.outerRadius
     )
-    this.coordinates = new HexCoordinates(x - Math.floor(y / 2), y)
+    this.coordinates = HexCoordinates.fromOffsetCoordinates(x, y)
 
     this.displayCoordinates()
   }

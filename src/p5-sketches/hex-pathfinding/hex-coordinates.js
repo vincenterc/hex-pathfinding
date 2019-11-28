@@ -1,3 +1,5 @@
+import HexMetrics from './hex-metrics'
+
 class HexCoordinates {
   constructor(x, y) {
     this.x = x
@@ -14,6 +16,10 @@ class HexCoordinates {
 
   get Z() {
     return -this.x - this.y
+  }
+
+  static fromOffsetCoordinates = (x, y) => {
+    return new HexCoordinates(x - Math.floor(y / 2), y)
   }
 }
 
