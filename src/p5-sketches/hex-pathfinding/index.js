@@ -1,6 +1,4 @@
 import World from './world'
-import HexCoordinates from './hex-coordinates'
-import HexMetrics from './hex-metrics'
 
 let p5 = null
 let world = null
@@ -23,25 +21,10 @@ function sketch(p) {
 }
 
 function onClickCanvas() {
-  selectCell()
+  let mousePosition = { x: p5.mouseX, y: p5.mouseY }
+
+  world.selectCell(mousePosition)
 }
-
-const selectCell = (function() {
-  let cellSelected = null
-
-  return function() {
-    if (cellSelected) cellSelected.color = '#fff'
-
-    let mousePosition = {
-      x: p5.mouseX - HexMetrics.innerRadius,
-      y: p5.mouseY - HexMetrics.outerRadius,
-    }
-    let hexCoordinates = HexCoordinates.fromPosition(mousePosition)
-
-    cellSelected = world.map.cells[hexCoordinates.x][hexCoordinates.y]
-    if (cellSelected) cellSelected.color = '#decc9c'
-  }
-})()
 
 export default sketch
 export { p5 }
