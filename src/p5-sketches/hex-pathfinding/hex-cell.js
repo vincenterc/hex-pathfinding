@@ -12,6 +12,7 @@ class HexCell {
       HexMetrics.outerRadius + y * 1.5 * HexMetrics.outerRadius
     )
     this.coordinates = HexCoordinates.fromOffsetCoordinates(x, y)
+    this.color = '#fff'
 
     this.displayCoordinates()
   }
@@ -19,7 +20,7 @@ class HexCell {
   display = () => {
     p5.strokeWeight(3)
     p5.stroke(0)
-    p5.fill(255)
+    p5.fill(this.color)
     p5.beginShape()
     for (let i = 0; i < HexMetrics.corners.length; i++) {
       let position = HexMetrics.corners[i].clone().add(this.position)
@@ -37,6 +38,7 @@ class HexCell {
     text.style('font-size', '12px')
     text.style('white-space', 'pre-wrap')
     text.style('text-align', 'center')
+    text.style('pointer-events', 'none')
   }
 }
 
