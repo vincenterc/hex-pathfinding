@@ -13,8 +13,6 @@ class HexCell {
     )
     this.coordinates = HexCoordinates.fromOffsetCoordinates(x, y)
     this.color = '#fff'
-
-    this.displayCoordinates()
   }
 
   display = () => {
@@ -27,18 +25,17 @@ class HexCell {
       p5.vertex(position.x, position.y)
     }
     p5.endShape(p5.CLOSE)
+
+    this.displayCoordinates()
   }
 
   displayCoordinates = () => {
-    let text = p5.createP(
-      `${this.coordinates.X}\n${this.coordinates.Y}\n${this.coordinates.Z}`
-    )
-    text.position(this.position.x, this.position.y)
-    text.style('transform', 'translate(-50%, -50%)')
-    text.style('font-size', '12px')
-    text.style('white-space', 'pre-wrap')
-    text.style('text-align', 'center')
-    text.style('pointer-events', 'none')
+    let string = `${this.coordinates.X}\n${this.coordinates.Y}\n${this.coordinates.Z}`
+    p5.stroke(0)
+    p5.strokeWeight(1)
+    p5.fill(0)
+    p5.textAlign(p5.CENTER, p5.CENTER)
+    p5.text(string, this.position.x, this.position.y)
   }
 }
 

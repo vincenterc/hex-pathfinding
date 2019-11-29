@@ -7,13 +7,14 @@ let world = null
 
 function sketch(p) {
   p5 = p
-  world = new World()
 
   p5.setup = function() {
     let canvas = p5.createCanvas(p5.windowWidth, p5.windowHeight)
-    canvas.mouseClicked(onClickCanvas)
-
     p5.background(125)
+
+    world = new World()
+
+    canvas.mouseClicked(onClickCanvas)
   }
 
   p5.draw = function() {
