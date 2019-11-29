@@ -12,7 +12,7 @@ function sketch(p) {
 
     world = new World()
 
-    canvas.mouseClicked(onClickCanvas)
+    canvas.doubleClicked(onDoubleClickCanvas)
   }
 
   p5.draw = function() {
@@ -20,7 +20,7 @@ function sketch(p) {
   }
 }
 
-function onClickCanvas() {
+function onDoubleClickCanvas() {
   let mousePosition = { x: p5.mouseX, y: p5.mouseY }
 
   world.selectCell(mousePosition)
