@@ -13,6 +13,9 @@ class HexCell {
     )
     this.coordinates = HexCoordinates.fromOffsetCoordinates(x, y)
     this.color = '#fff'
+
+    this.distance = 0
+    this.distanceDisplayed = false
   }
 
   display = () => {
@@ -26,7 +29,11 @@ class HexCell {
     }
     p5.endShape(p5.CLOSE)
 
-    this.displayCoordinates()
+    // this.displayCoordinates()
+
+    if (this.distanceDisplayed) {
+      this.displayDistance()
+    }
   }
 
   displayCoordinates = () => {
@@ -36,6 +43,14 @@ class HexCell {
     p5.fill(0)
     p5.textAlign(p5.CENTER, p5.CENTER)
     p5.text(string, this.position.x, this.position.y)
+  }
+
+  displayDistance = () => {
+    p5.stroke(0)
+    p5.strokeWeight(1)
+    p5.fill(0)
+    p5.textAlign(p5.CENTER, p5.CENTER)
+    p5.text(`${this.distance}`, this.position.x, this.position.y)
   }
 }
 

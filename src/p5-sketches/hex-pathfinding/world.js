@@ -21,8 +21,19 @@ class World {
 
       cellSelected = this.map.cells[hexCoordinates.x][hexCoordinates.y]
       if (cellSelected) cellSelected.color = '#decc9c'
+
+      this.findDistanceTo(cellSelected)
     }
   })()
+
+  findDistanceTo = cell => {
+    this.map.cells.forEach(col => {
+      col.forEach(c => {
+        c.distance = c.coordinates.distanceTo(cell.coordinates)
+        c.distanceDisplayed = true
+      })
+    })
+  }
 
   display = () => {
     this.map.display()

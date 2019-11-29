@@ -46,6 +46,15 @@ class HexCoordinates {
 
     return new HexCoordinates(rx + Math.floor(ry / 2), ry)
   }
+
+  distanceTo(other) {
+    return (
+      (Math.abs(this.X - other.X) +
+        Math.abs(this.Y - other.Y) +
+        Math.abs(this.Z - other.Z)) /
+      2
+    )
+  }
 }
 
 export default HexCoordinates
