@@ -2,17 +2,19 @@ import World from './world'
 
 let p5 = null
 let world = null
+let isMapEditing = false
 
 function sketch(p) {
   p5 = p
 
   p5.setup = function() {
+    createEditMapButton()
     let canvas = p5.createCanvas(p5.windowWidth, p5.windowHeight)
     p5.background(125)
 
     world = new World()
 
-    canvas.doubleClicked(onDoubleClickCanvas)
+    canvas.mouseClicked(onMouseClickCanvas)
   }
 
   p5.draw = function() {
@@ -20,10 +22,30 @@ function sketch(p) {
   }
 }
 
-function onDoubleClickCanvas() {
-  let mousePosition = { x: p5.mouseX, y: p5.mouseY }
+function createEditMapButton() {
+  let button = p5.createButton('EDIT MAP')
+  button.position(10, 10)
+  button.style('width', '70px')
+  button.style('height', '24px')
+  button.style('border-radius', '5px')
+  button.style('font-size', '12px')
+  button.mouseClicked(() => {
+    if (isMapEditing) {
+      isMapEditing = false
+      button.html('EDIT MAP')
+    } else {
+      isMapEditing = true
+      button.html('BACK')
+    }
+  })
+}
 
-  world.selectCell(mousePosition)
+function onMouseClickCanvas() {
+  if (isMapEditing) {
+    world.setCell({ x: p5.mouseX, y: p5.mouseY })
+  } else {
+    world.selectCell({ x: p5.mouseX, y: p5.mouseY })
+  }
 }
 
 export default sketch
