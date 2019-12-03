@@ -2,6 +2,7 @@ import HexGrid from './hex-grid'
 import HexMetrics from './hex-metrics'
 import HexCoordinates from './hex-coordinates'
 import HexCellType from './hex-cell-type'
+import { delay } from '../../utils/delayUtils'
 
 class World {
   constructor() {
@@ -38,13 +39,22 @@ class World {
     }
   })()
 
-  findDistanceTo = cell => {
-    this.map.cells.forEach(col => {
+  findDistanceTo = async cell => {
+    this.map.cells.forEach(col =>
       col.forEach(c => {
-        c.distance = c.coordinates.distanceTo(cell.coordinates)
-        c.distanceDisplayed = true
+        c.distance = 0
+        c.distanceDisplayed = false
       })
-    })
+    )
+
+    for (let i = 0; i < this.map.cells.length; i++) {
+      let col = this.map.cells[i]
+      for (let j = 0; j < col.length; j++) {
+        await delay(1 / 500)
+        col[j].distance = col[j].coordinates.distanceTo(cell.coordinates)
+        col[j].distanceDisplayed = true
+      }
+    }
   }
 
   display = () => {
