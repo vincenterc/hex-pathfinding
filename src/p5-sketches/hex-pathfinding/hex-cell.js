@@ -3,6 +3,7 @@ import Vector2 from './vector2'
 import HexCoordinates from './hex-coordinates'
 import { p5 } from './index'
 import HexCellType from './hex-cell-type'
+import HexDirections from './hex-directions'
 
 class HexCell {
   constructor(x, y) {
@@ -13,6 +14,8 @@ class HexCell {
       HexMetrics.outerRadius + y * 1.5 * HexMetrics.outerRadius
     )
     this.coordinates = HexCoordinates.fromOffsetCoordinates(x, y)
+
+    this.neighbors = []
 
     this.type = HexCellType.normal.key
 
@@ -27,6 +30,11 @@ class HexCell {
 
   get type() {
     return this._type
+  }
+
+  setNeighbor = (direction, cell) => {
+    this.neighbors[direction.value] = cell
+    cell.neighbors[HexDirections.opposite(direction).value] = this
   }
 
   display = () => {
