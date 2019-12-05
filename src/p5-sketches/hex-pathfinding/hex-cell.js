@@ -16,8 +16,7 @@ class HexCell {
 
     this.type = HexCellType.normal.key
 
-    this.distance = 0
-    this.distanceDisplayed = false
+    this.distance = Infinity
   }
 
   set type(type) {
@@ -43,9 +42,7 @@ class HexCell {
 
     // this.displayCoordinates()
 
-    if (this.distanceDisplayed) {
-      this.displayDistance()
-    }
+    this.displayDistance()
   }
 
   displayCoordinates = () => {
@@ -62,7 +59,8 @@ class HexCell {
     p5.strokeWeight(1)
     p5.fill(0)
     p5.textAlign(p5.CENTER, p5.CENTER)
-    p5.text(`${this.distance}`, this.position.x, this.position.y)
+    let text = this.distance === Infinity ? '' : `${this.distance}`
+    p5.text(text, this.position.x, this.position.y)
   }
 }
 

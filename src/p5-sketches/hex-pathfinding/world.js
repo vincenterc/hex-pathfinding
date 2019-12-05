@@ -43,17 +43,15 @@ class World {
   findDistanceTo = async cell => {
     this.map.cells.forEach(col =>
       col.forEach(c => {
-        c.distance = 0
-        c.distanceDisplayed = false
+        c.distance = Infinity
       })
     )
 
     for (let i = 0; i < this.map.cells.length; i++) {
       let col = this.map.cells[i]
       for (let j = 0; j < col.length; j++) {
-        await delay(1 / 500)
+        await delay(1 / 1000)
         col[j].distance = col[j].coordinates.distanceTo(cell.coordinates)
-        col[j].distanceDisplayed = true
       }
     }
   }
