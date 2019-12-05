@@ -15,8 +15,9 @@ class World {
       y: mousePosition.y - HexMetrics.outerRadius,
     }
     let hexCoordinates = HexCoordinates.fromPosition(mousePosition)
+    let { x, y } = HexCoordinates.toOffsetCoordinates(hexCoordinates)
 
-    return this.map.cells[hexCoordinates.x][hexCoordinates.y]
+    return this.map.cells[x][y]
   }
 
   setCell = mousePosition => {

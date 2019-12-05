@@ -22,6 +22,13 @@ class HexCoordinates {
     return new HexCoordinates(x - Math.floor(y / 2), y)
   }
 
+  static toOffsetCoordinates = coordinates => {
+    return {
+      x: coordinates.x + Math.floor(coordinates.y / 2),
+      y: coordinates.y,
+    }
+  }
+
   static fromPosition = position => {
     let x =
       ((Math.sqrt(3) / 3) * position.x - (1 / 3) * position.y) /
@@ -44,7 +51,7 @@ class HexCoordinates {
       }
     }
 
-    return new HexCoordinates(rx + Math.floor(ry / 2), ry)
+    return new HexCoordinates(rx, ry)
   }
 
   distanceTo(other) {
