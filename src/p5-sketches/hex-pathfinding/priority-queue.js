@@ -10,11 +10,11 @@ class PriorityQueue {
   }
 
   dequeue() {
-    return this.items.pop()
+    return this.items.pop().element
   }
 
   isEmpty() {
-    this.items.length === 0
+    return this.items.length === 0
   }
 }
 
