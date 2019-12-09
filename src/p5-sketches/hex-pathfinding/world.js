@@ -3,6 +3,7 @@ import HexMetrics from './hex-metrics'
 import HexCoordinates from './hex-coordinates'
 import HexCellType from './hex-cell-type'
 import { delay } from '../../utils/delayUtils'
+import Queue from './queue'
 
 class World {
   constructor() {
@@ -40,18 +41,31 @@ class World {
     }
   })()
 
-  findDistanceTo = async cell => {
+  findDistanceTo = cell => {
     this.map.cells.forEach(col =>
       col.forEach(c => {
         c.distance = Infinity
       })
     )
 
-    for (let i = 0; i < this.map.cells.length; i++) {
-      let col = this.map.cells[i]
-      for (let j = 0; j < col.length; j++) {
-        await delay(1 / 1000)
-        col[j].distance = col[j].coordinates.distanceTo(cell.coordinates)
+    this.breadthFirstSearch(cell)
+  }
+
+  breadthFirstSearch = async cell => {
+    let frontier = new Queue()
+
+    cell.distance = 0
+    frontier.enqueue(cell)
+
+    while (!frontier.isEmpty()) {
+      await delay(1 / 60)
+      let current = frontier.dequeue()
+
+      for (let neighbor of current.neighbors) {
+        if (!!neighbor && neighbor.distance === Infinity) {
+          neighbor.distance = current.distance + 1
+          frontier.enqueue(neighbor)
+        }
       }
     }
   }
