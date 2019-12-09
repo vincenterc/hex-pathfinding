@@ -4,6 +4,7 @@ import HexCoordinates from './hex-coordinates'
 import HexCellType from './hex-cell-type'
 import { delay } from '../../utils/delayUtils'
 import Queue from './queue'
+import PriorityQueue from './priority-queue'
 
 class World {
   constructor() {
@@ -48,7 +49,7 @@ class World {
       })
     )
 
-    this.breadthFirstSearch(cell)
+    this.dijkstraAlgorithm(cell)
   }
 
   breadthFirstSearch = async cell => {
@@ -68,6 +69,30 @@ class World {
 
         neighbor.distance = current.distance + neighbor.movementCost
         frontier.enqueue(neighbor)
+      }
+    }
+  }
+
+  dijkstraAlgorithm = async cell => {
+    let frontier = new PriorityQueue()
+
+    cell.distance = 0
+    frontier.enqueue(cell, cell.distance)
+
+    while (!frontier.isEmpty()) {
+      await delay(1 / 60)
+      let current = frontier.dequeue()
+
+      for (let neighbor of current.neighbors) {
+        if (!neighbor) continue
+
+        if (neighbor.movementCost === Infinity) continue
+
+        let distance = current.distance + neighbor.movementCost
+        if (neighbor.distance === Infinity || distance < neighbor.distance) {
+          neighbor.distance = distance
+          frontier.enqueue(neighbor, distance)
+        }
       }
     }
   }
