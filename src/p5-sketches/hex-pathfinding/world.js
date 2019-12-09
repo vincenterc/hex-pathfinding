@@ -66,7 +66,7 @@ class World {
 
         if (neighbor.movementCost === Infinity) continue
 
-        neighbor.distance = current.distance + 1
+        neighbor.distance = current.distance + neighbor.movementCost
         frontier.enqueue(neighbor)
       }
     }
