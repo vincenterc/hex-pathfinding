@@ -62,10 +62,12 @@ class World {
       let current = frontier.dequeue()
 
       for (let neighbor of current.neighbors) {
-        if (!!neighbor && neighbor.distance === Infinity) {
-          neighbor.distance = current.distance + 1
-          frontier.enqueue(neighbor)
-        }
+        if (!neighbor || neighbor.distance !== Infinity) continue
+
+        if (neighbor.movementCost === Infinity) continue
+
+        neighbor.distance = current.distance + 1
+        frontier.enqueue(neighbor)
       }
     }
   }
