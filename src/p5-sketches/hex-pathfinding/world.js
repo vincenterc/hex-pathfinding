@@ -31,13 +31,21 @@ class World {
   }
 
   selectCell = (function() {
-    let cellSelected = null
+    let previousSelectedCell = null
+    let originalCellColor = ''
 
     return function(mousePosition) {
-      cellSelected = this.getCell(mousePosition)
+      let selectedCell = this.getCell(mousePosition)
 
-      if (cellSelected && cellSelected.type !== HexCellType.wall.key) {
-        this.findDistanceTo(cellSelected)
+      if (selectedCell) {
+        if (selectedCell.type === HexCellType.wall.key) return
+
+        if (previousSelectedCell) previousSelectedCell.color = originalCellColor
+
+        previousSelectedCell = selectedCell
+        originalCellColor = selectedCell.color
+        selectedCell.color = '#00f'
+        this.findDistanceTo(selectedCell)
       }
     }
   })()
