@@ -5,6 +5,8 @@ import HexCellType from './hex-cell-type'
 import { delay } from '../../utils/delayUtils'
 import Queue from './queue'
 import PriorityQueue from './priority-queue'
+import { p5 } from './index'
+import HexCell from './hex-cell'
 
 class World {
   constructor() {
@@ -31,8 +33,12 @@ class World {
   }
 
   selectCell = (function() {
-    let previousSelectedCell = null
-    let originalCellColor = ''
+    let fromCell = null
+    let previousFromCell = null
+    let originalFromCellColor = ''
+    let toCell = null
+    let previousToCell = null
+    let originalToCellColor = null
 
     return function(mousePosition) {
       let selectedCell = this.getCell(mousePosition)
@@ -40,35 +46,60 @@ class World {
       if (selectedCell) {
         if (selectedCell.type === HexCellType.wall.key) return
 
-        if (previousSelectedCell) previousSelectedCell.color = originalCellColor
+        if (p5.keyIsPressed && p5.keyCode === p5.SHIFT) {
+          if (previousToCell) previousToCell.color = originalToCellColor
 
-        previousSelectedCell = selectedCell
-        originalCellColor = selectedCell.color
-        selectedCell.color = '#00f'
-        this.findDistanceTo(selectedCell)
+          toCell = selectedCell
+          previousToCell = selectedCell
+          originalToCellColor = selectedCell.color
+          toCell.color = HexCell.toCellColor
+        } else {
+          if (previousFromCell) previousFromCell.color = originalFromCellColor
+
+          fromCell = selectedCell
+          previousFromCell = selectedCell
+          originalFromCellColor = selectedCell.color
+          fromCell.color = HexCell.fromCellColor
+        }
+
+        if (fromCell && toCell && fromCell !== toCell) {
+          this.findPathAndDistance(fromCell, toCell)
+        }
       }
     }
   })()
 
-  findDistanceTo = cell => {
+  findPathAndDistance = (fromCell, toCell) => {
     this.map.cells.forEach(col =>
       col.forEach(c => {
         c.distance = Infinity
+        c.color = HexCellType[c.type].color
       })
     )
+    fromCell.color = HexCell.fromCellColor
+    toCell.color = HexCell.toCellColor
 
-    this.dijkstraAlgorithm(cell)
+    this.dijkstraAlgorithm(fromCell, toCell)
   }
 
-  breadthFirstSearch = async cell => {
+  breadthFirstSearch = async (fromCell, toCell) => {
     let frontier = new Queue()
 
-    cell.distance = 0
-    frontier.enqueue(cell)
+    fromCell.distance = 0
+    frontier.enqueue(fromCell)
 
     while (!frontier.isEmpty()) {
       await delay(1 / 60)
       let current = frontier.dequeue()
+
+      if (current === toCell) {
+        current = current.pathFrom
+        while (current !== fromCell) {
+          current.color = HexCell.pathCellColor
+          current = current.pathFrom
+        }
+        break
+      }
 
       for (let neighbor of current.neighbors) {
         if (!neighbor || neighbor.distance !== Infinity) continue
@@ -76,20 +107,30 @@ class World {
         if (neighbor.movementCost === Infinity) continue
 
         neighbor.distance = current.distance + neighbor.movementCost
+        neighbor.pathFrom = current
         frontier.enqueue(neighbor)
       }
     }
   }
 
-  dijkstraAlgorithm = async cell => {
+  dijkstraAlgorithm = async (fromCell, toCell) => {
     let frontier = new PriorityQueue()
 
-    cell.distance = 0
-    frontier.enqueue(cell, cell.distance)
+    fromCell.distance = 0
+    frontier.enqueue(fromCell, fromCell.distance)
 
     while (!frontier.isEmpty()) {
       await delay(1 / 60)
       let current = frontier.dequeue()
+
+      if (current === toCell) {
+        current = current.pathFrom
+        while (current !== fromCell) {
+          current.color = HexCell.pathCellColor
+          current = current.pathFrom
+        }
+        break
+      }
 
       for (let neighbor of current.neighbors) {
         if (!neighbor) continue
@@ -99,6 +140,7 @@ class World {
         let distance = current.distance + neighbor.movementCost
         if (neighbor.distance === Infinity || distance < neighbor.distance) {
           neighbor.distance = distance
+          neighbor.pathFrom = current
           frontier.enqueue(neighbor, distance)
         }
       }

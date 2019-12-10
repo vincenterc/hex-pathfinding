@@ -6,6 +6,10 @@ import HexCellType from './hex-cell-type'
 import HexDirections from './hex-directions'
 
 class HexCell {
+  static fromCellColor = '#00f'
+  static toCellColor = '#f00'
+  static pathCellColor = '#999'
+
   constructor(x, y) {
     this.position = new Vector2(
       HexMetrics.innerRadius +
@@ -16,6 +20,7 @@ class HexCell {
     this.coordinates = HexCoordinates.fromOffsetCoordinates(x, y)
 
     this.neighbors = []
+    this.pathFrom = null
 
     this.type = HexCellType.normal.key
 
