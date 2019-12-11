@@ -8,7 +8,7 @@ import HexDirections from './hex-directions'
 class HexCell {
   static fromCellColor = '#00f'
   static toCellColor = '#f00'
-  static pathCellColor = '#999'
+  static pathCellColor = '#bbb'
 
   constructor(x, y) {
     this.position = new Vector2(

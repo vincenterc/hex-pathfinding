@@ -79,7 +79,7 @@ class World {
     fromCell.color = HexCell.fromCellColor
     toCell.color = HexCell.toCellColor
 
-    this.dijkstraAlgorithm(fromCell, toCell)
+    this.aStarAlgorithm(fromCell, toCell)
   }
 
   breadthFirstSearch = async (fromCell, toCell) => {
@@ -142,6 +142,41 @@ class World {
           neighbor.distance = distance
           neighbor.pathFrom = current
           frontier.enqueue(neighbor, distance)
+        }
+      }
+    }
+  }
+
+  aStarAlgorithm = async (fromCell, toCell) => {
+    let frontier = new PriorityQueue()
+
+    fromCell.distance = 0
+    frontier.enqueue(fromCell, fromCell.distance)
+
+    while (!frontier.isEmpty()) {
+      await delay(1 / 60)
+      let current = frontier.dequeue()
+
+      if (current === toCell) {
+        current = current.pathFrom
+        while (current !== fromCell) {
+          current.color = HexCell.pathCellColor
+          current = current.pathFrom
+        }
+        break
+      }
+
+      for (let neighbor of current.neighbors) {
+        if (!neighbor) continue
+
+        if (neighbor.movementCost === Infinity) continue
+
+        let distance = current.distance + neighbor.movementCost
+        let heuristic = neighbor.coordinates.distanceTo(toCell.coordinates)
+        if (neighbor.distance === Infinity || distance < neighbor.distance) {
+          neighbor.distance = distance
+          neighbor.pathFrom = current
+          frontier.enqueue(neighbor, distance + heuristic)
         }
       }
     }
