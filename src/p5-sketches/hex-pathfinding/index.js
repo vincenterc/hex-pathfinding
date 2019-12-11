@@ -8,7 +8,7 @@ function sketch(p) {
   p5 = p
 
   p5.setup = function() {
-    createEditMapButton()
+    createPanel()
     let canvas = p5.createCanvas(p5.windowWidth, p5.windowHeight)
     p5.background(125)
 
@@ -22,20 +22,36 @@ function sketch(p) {
   }
 }
 
-function createEditMapButton() {
-  let button = p5.createButton('EDIT MAP')
-  button.position(10, 10)
-  button.style('width', '70px')
-  button.style('height', '24px')
-  button.style('border-radius', '5px')
-  button.style('font-size', '12px')
-  button.mouseClicked(() => {
+function createPanel() {
+  // Information p
+  let normalInformation =
+    'LEFT CLICK to set start cell\nSHIFT + LEFT CLICK to set end cell'
+  let editModeInformation =
+    'LEFT CLICK to edit cells\nWATER BLUE is the river\nBLACK is the wall'
+  let informationP = p5.createP(normalInformation)
+  informationP.position(10, 35)
+  informationP.style('color', '#333')
+  informationP.style('font-weight', 'bold')
+  informationP.style('text-shadow', '1px 1px #999')
+  informationP.style('white-space', 'pre-wrap')
+  informationP.style('pointer-events', 'none')
+
+  // Edit button
+  let editButton = p5.createButton('EDIT MAP')
+  editButton.position(10, 10)
+  editButton.style('width', '70px')
+  editButton.style('height', '24px')
+  editButton.style('border-radius', '5px')
+  editButton.style('font-size', '12px')
+  editButton.mouseClicked(() => {
     if (isMapEditing) {
       isMapEditing = false
-      button.html('EDIT MAP')
+      editButton.html('EDIT MAP')
+      informationP.html(normalInformation)
     } else {
       isMapEditing = true
-      button.html('BACK')
+      editButton.html('BACK')
+      informationP.html(editModeInformation)
     }
   })
 }
